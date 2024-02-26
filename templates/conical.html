@@ -1,0 +1,1084 @@
+{%load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>INVENTORY MANAGEMENT</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href={% static '/assets/img/favicon.png' %} rel="icon">
+    <link href={% static '/assets/img/apple-touch-icon.png' %} rel="apple-touch-icon">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href={% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %} rel="stylesheet">
+    <link href={% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %} rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href={% static 'assets/css/style.css' %} rel="stylesheet">
+
+    <!-- ===== DataTables Js and CSS File ===== -->
+    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <!-- <script type="text/javascript" charset="utf8" -->
+    <!-- src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script> -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css"> -->
+    <!-- =============APEXCHARTS============ -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+
+</head>
+
+<body style="height: 100% ;overflow: hidden;">
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a class="logo d-flex align-items-center">
+                <img src={% static 'assets/img/logo1.png' %} alt="">
+                <span style="color:rgb(227, 148, 64);font-weight:bold;font-size:3vh;">INVENTORY_MANAGEMENT</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+    </header><!-- End Header -->
+
+    <!-- ===== Sidebar ===== -->
+    <aside id="sidebar" class="sidebar">
+        <ul class="sidebar-nav" id="sidebar-nav">
+            <li class="nav-item" style="width: 40vh;">
+                <a class="nav-link " href="dashboard_page">
+                    <i class="bi bi-houses-fill" style="color: #d59124"></i>
+                    <span style="color: #d59124;font-size:2.5vh;">Dashboard</span>
+                </a>
+                <a class="nav-link " href="cylindrical">
+                    <i class="bi bi-gear-fill" style="color: #d59124"></i>
+                    <span style="color: #d59124;font-size:2.5vh;">Tank Inventory</span>
+                </a>
+                <a class="nav-link " href="#">
+                    <i class="bi bi-file-earmark-text" style="color: #d59124"></i>
+                    <span style="color: #d59124;font-size:2.5vh;">Reports</span>
+                </a>
+            </li>
+        </ul>
+    </aside>
+    <main id="main" class="main">
+        <section class="section dashboard">
+            <div class="row">
+                <div style="margin-bottom: 0.2vh;">
+
+
+                    <button onclick="Input()" style="display: inline-block; background-color: #8d9fb1;color: #e5e7e9;border: none;width: 15vh;
+                        border-radius: 1vh;cursor: pointer;">Inputs</button>
+                    <button onclick="CylindricalB()" style="display: inline-block; background-color: #8d9fb1;color: #e5e7e9;border: none;width: 15vh;
+                        border-radius: 1vh;cursor: pointer;">Cylindrical</button>
+                    <button onclick="ConicalB()" style="display: inline-block; background-color: #8d9fb1;color: #e5e7e9;border: none;width: 15vh;
+                        border-radius: 1vh;cursor: pointer;">Conical</button>
+                </div>
+                <script>
+                    function Input() {
+                        window.location.href = 'config_page';
+                    }
+                    function CylindricalB() {
+                        window.location.href = 'cylindrical';
+                    }
+                    function ConicalB() {
+                        window.location.href = 'conical';
+                    }
+                </script>
+                <div
+                    style="border:1px solid rgb(182, 197, 203);border-radius: 1vh;width:100%;cursor: pointer;height: 85vh;background-color: #daece7;">
+
+                    <div style="float: left;margin-top: 30vh;margin-left: 20vh;">
+                        <div>
+                            <label
+                                style="text-decoration: underline; font-weight: bold;font-size: 1.8vh;margin-left: 2vh;">
+                                Volume of product(ltr)</label>
+                        </div>
+                        <canvas id="barCanvas" width="250" height="200"></canvas>
+                    </div>
+
+                    <div style="margin-top: 2vh;margin-left: 60vh;">
+                        <label style="text-decoration: underline; font-weight: bold;"> TANK INVENTORY AND STATUS
+                        </label><br>
+                        <label style="text-decoration: underline; font-weight: bold;font-size: 1.8vh;margin-left: 2vh;">
+                            TANK</label>
+                        <label
+                            style="text-decoration: underline; font-weight: bold;margin-left: 22vh;font-size: 1.8vh;">
+                            PRODUCT</label><br>
+                        <div>
+                            <select id="tankSelect" style="width: 10vh; height: 3vh;font-size: 1.8vh;"
+                                onchange="handleTankSelect()">
+                                <option value="Tank1">Tank 1</option>
+                                <option value="Tank2">Tank 2</option>
+                                <option value="Tank3">Tank 3</option>
+                                <option value="Tank4">Tank 4</option>
+                                <option value="Tank5">Tank 5</option>
+                                <option value="Tank6">Tank 6</option>
+                                <option value="Tank7">Tank 7</option>
+                                <option value="Tank8">Tank 8</option>
+                            </select>
+
+                            <input id="productInput" type="text"
+                                style="width: 10vh;height: 3vh;margin-left: 18.5vh;font-size: 1.9vh;">
+                        </div><br>
+                    </div>
+
+                    <script>
+                        function handleTankSelect() {
+
+                            var selectedTank = document.getElementById("tankSelect").value;
+                            // var productInput = document.getElementById("productInput");
+
+                            // AJAX request to fetch data based on selected tank
+                            if (selectedTank == "") {
+                                myfunction();
+                                console.log("something is this:", selectedTank)
+                                return; // Exit the function if nothing is selected
+                            }
+                            $.ajax({
+                                url: 'conical_data', // Replace with the actual URL to fetch data from the server
+                                type: 'GET',
+                                // data: { tank: selectedTank },
+                                dataType: 'json',
+                                success: function (response) {
+                                    Product_name = response.Product_name
+                                    clearInterval(intervalForTank1);
+                                    clearInterval(intervalForTank2);
+                                    clearInterval(intervalForTank3);
+                                    clearInterval(intervalForTank4);
+                                    clearInterval(intervalForTank5);
+                                    clearInterval(intervalForTank6);
+                                    clearInterval(intervalForTank7);
+                                    clearInterval(intervalForTank8);
+                                    // console.log(Product_name)
+                                    // Run different functions based on the selected tank
+                                    if (selectedTank === "Tank1") {
+                                        document.getElementById("productInput").value = Product_name[0]
+                                        myfunction();
+                                        clearInterval(intervalForTank2, intervalForTank3, intervalForTank4, intervalForTank5, intervalForTank6, intervalForTank7, intervalForTank8); // Stop interval for Tank2 if it was running
+                                        intervalForTank1 = setInterval(myfunction, 3000);
+                                    }
+                                    else if (selectedTank === "Tank2") {
+                                        document.getElementById("productInput").value = Product_name[1]
+                                        myfunction2();
+                                        clearInterval(intervalForTank1, intervalForTank3, intervalForTank4, intervalForTank5, intervalForTank6, intervalForTank7, intervalForTank8); // Stop interval for Tank1 if it was running
+                                        intervalForTank2 = setInterval(myfunction2, 3000);
+                                    }
+                                    else if (selectedTank === "Tank3") {
+                                        document.getElementById("productInput").value = Product_name[2]
+                                        myfunction3();
+                                        clearInterval(intervalForTank1, intervalForTank2, intervalForTank4, intervalForTank5, intervalForTank6, intervalForTank7, intervalForTank8); // Stop interval for Tank1 if it was running
+                                        intervalForTank3 = setInterval(myfunction3, 3000);
+                                    }
+                                    else if (selectedTank === "Tank4") {
+                                        document.getElementById("productInput").value = Product_name[3]
+                                        myfunction4();
+                                        clearInterval(intervalForTank1, intervalForTank2, intervalForTank3, intervalForTank5, intervalForTank6, intervalForTank7, intervalForTank8); // Stop interval for Tank1 if it was running
+                                        intervalForTank4 = setInterval(myfunction4, 3000);
+                                    }
+                                    else if (selectedTank === "Tank5") {
+                                        document.getElementById("productInput").value = Product_name[4]
+                                        myfunction5();
+                                        clearInterval(intervalForTank1, intervalForTank2, intervalForTank3, intervalForTank4, intervalForTank6, intervalForTank7, intervalForTank8); // Stop interval for Tank1 if it was running
+                                        intervalForTank5 = setInterval(myfunction5, 3000);
+                                    }
+                                    else if (selectedTank === "Tank6") {
+                                        document.getElementById("productInput").value = Product_name[5]
+                                        myfunction6();
+                                        clearInterval(intervalForTank1, intervalForTank2, intervalForTank3, intervalForTank4, intervalForTank5, intervalForTank7, intervalForTank8); // Stop interval for Tank1 if it was running
+                                        intervalForTank6 = setInterval(myfunction6, 3000);
+                                    }
+                                    else if (selectedTank === "Tank7") {
+                                        document.getElementById("productInput").value = Product_name[6]
+                                        myfunction7();
+                                        clearInterval(intervalForTank1, intervalForTank2, intervalForTank3, intervalForTank4, intervalForTank5, intervalForTank6, intervalForTank8); // Stop interval for Tank1 if it was running
+                                        intervalForTank7 = setInterval(myfunction7, 3000);
+                                    }
+                                    else if (selectedTank === "Tank8") {
+                                        document.getElementById("productInput").value = Product_name[7]
+                                        myfunction8();
+                                        clearInterval(intervalForTank1, intervalForTank2, intervalForTank3, intervalForTank4, intervalForTank5, intervalForTank6, intervalForTank7); // Stop interval for Tank1 if it was running
+                                        intervalForTank7 = setInterval(myfunction8, 3000);
+                                    }
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+                        }
+                        handleTankSelect()
+                        var intervalForTank1, intervalForTank2, intervalForTank3, intervalForTank4, intervalForTank5, intervalForTank6, intervalForTank7, intervalForTank8;
+                        function myfunction() {
+                            $.ajax({
+                                url: 'line_data',  // Replace with the actual URL of your API endpoint
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (response) {
+                                    var tag1_values = response.tag1_values;
+                                    var tanks_volume2 = response.tanks_volume2
+                                    // tag1_values=[80]
+                                    var lastValue = [tag1_values[tag1_values.length - 1]]
+                                    console.log('function 1')
+
+                                    function convertPercentage(oldValue) {
+                                        var oldMin = 4;
+                                        var oldMax = 20;
+                                        var newMin = 0;
+                                        var newMax = 100;
+
+                                        // Convert the percentage value to the 0-1 range
+                                        var percentage = (oldValue - oldMin) / (oldMax - oldMin);
+
+                                        // Convert the 0-1 range to the new range
+                                        var newValue = (percentage * (newMax - newMin)) + newMin;
+
+                                        return newValue;
+                                    }
+                                    var oldValue = lastValue; // For example, representing 10%
+                                    var newValue = [convertPercentage(oldValue)]
+                                    // console.log(newValue);
+
+                                    function drawBarGraph(newValue) {
+                                        var canvas = document.getElementById('barCanvas');
+                                        var context = canvas.getContext('2d');
+
+                                        var barWidth = 20;
+                                        var spaceBetweenBars = 30;
+                                        var startX = 50;
+                                        var startY = 20;
+                                        var maxHeight = canvas.height - startY * 2;
+
+                                        // Clear the canvas
+                                        context.clearRect(0, 0, canvas.width, canvas.height);
+
+                                        // Draw bars
+                                        for (var i = 0; i < newValue.length; i++) {
+                                            var barHeight = (newValue[i] / 100) * maxHeight; // Adjusting the bar height based on the y-value
+                                            context.beginPath();
+                                            context.rect(startX + i * (barWidth + spaceBetweenBars), startY + maxHeight - barHeight, barWidth, barHeight);
+                                            context.fillStyle = 'grey'; // Color of the bars
+                                            context.fill();
+                                            // context.strokeStyle = 'black'; // Border color of the bars
+                                            // context.stroke();
+                                        }
+                                        context.fillStyle = 'black';
+                                        context.textAlign = 'center';
+                                        context.fillText('volume of tank ' + tanks_volume2[0] + 'Ltr', startX + i * (barWidth + spaceBetweenBars) + barWidth / 2, startY + maxHeight - barHeight - 5);
+                                        // Draw markings and text
+                                        context.beginPath();
+                                        context.font = "10px Arial";
+                                        context.textAlign = "right";
+                                        context.fillStyle = "grey";
+                                        context.fillText("100", startX - 10, startY + 10);
+                                        context.fillText("80", startX - 10, startY + maxHeight * 0.2 + 10);
+                                        context.fillText("60", startX - 10, startY + maxHeight * 0.4 + 10);
+                                        context.fillText("40", startX - 10, startY + maxHeight * 0.6 + 10);
+                                        context.fillText("20", startX - 10, startY + maxHeight * 0.8 + 10);
+                                        context.fillText("0", startX - 10, startY + maxHeight + 10);
+
+                                        context.moveTo(startX - 5, startY);
+                                        context.lineTo(startX - 5, startY + maxHeight + 5);
+                                        context.strokeStyle = "black";
+                                        context.stroke();
+                                    }
+
+                                    // Call the function to draw the bar graph
+                                    drawBarGraph(newValue);
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+
+                        }
+                        function myfunction2() {
+                            $.ajax({
+                                url: 'line_data',  // Replace with the actual URL of your API endpoint
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (response) {
+                                    var tag2_values = response.tag2_values;
+                                    var tanks_volume2 = response.tanks_volume2
+                                    var lastValue = [tag2_values[tag2_values.length - 1]]
+                                    console.log('function 2')
+
+                                    function convertPercentage(oldValue) {
+                                        var oldMin = 4;
+                                        var oldMax = 20;
+                                        var newMin = 0;
+                                        var newMax = 100;
+
+                                        // Convert the percentage value to the 0-1 range
+                                        var percentage = (oldValue - oldMin) / (oldMax - oldMin);
+
+                                        // Convert the 0-1 range to the new range
+                                        var newValue = (percentage * (newMax - newMin)) + newMin;
+
+                                        return newValue;
+                                    }
+                                    var oldValue = lastValue; // For example, representing 10%
+                                    var newValue = [convertPercentage(oldValue)]
+                                    // console.log(newValue);
+
+                                    function drawBarGraph(newValue) {
+                                        var canvas = document.getElementById('barCanvas');
+                                        var context = canvas.getContext('2d');
+
+                                        var barWidth = 20;
+                                        var spaceBetweenBars = 30;
+                                        var startX = 50;
+                                        var startY = 20;
+                                        var maxHeight = canvas.height - startY * 2;
+
+                                        // Clear the canvas
+                                        context.clearRect(0, 0, canvas.width, canvas.height);
+
+                                        // Draw bars
+                                        for (var i = 0; i < newValue.length; i++) {
+                                            var barHeight = (newValue[i] / 100) * maxHeight; // Adjusting the bar height based on the y-value
+                                            context.beginPath();
+                                            context.rect(startX + i * (barWidth + spaceBetweenBars), startY + maxHeight - barHeight, barWidth, barHeight);
+                                            context.fillStyle = 'grey'; // Color of the bars
+                                            context.fill();
+                                            // context.strokeStyle = 'black'; // Border color of the bars
+                                            // context.stroke();
+                                        }
+                                        context.fillStyle = 'black';
+                                        context.textAlign = 'center';
+                                        context.fillText('volume of tank ' + tanks_volume2[1] + 'Ltr', startX + i * (barWidth + spaceBetweenBars) + barWidth / 2, startY + maxHeight - barHeight - 5);
+
+                                        // Draw markings and text
+                                        context.beginPath();
+                                        context.font = "10px Arial";
+                                        context.textAlign = "right";
+                                        context.fillStyle = "grey";
+                                        context.fillText("100", startX - 10, startY + 10);
+                                        context.fillText("80", startX - 10, startY + maxHeight * 0.2 + 10);
+                                        context.fillText("60", startX - 10, startY + maxHeight * 0.4 + 10);
+                                        context.fillText("40", startX - 10, startY + maxHeight * 0.6 + 10);
+                                        context.fillText("20", startX - 10, startY + maxHeight * 0.8 + 10);
+                                        context.fillText("0", startX - 10, startY + maxHeight + 10);
+
+                                        context.moveTo(startX - 5, startY);
+                                        context.lineTo(startX - 5, startY + maxHeight + 5);
+                                        context.strokeStyle = "black";
+                                        context.stroke();
+                                    }
+
+                                    // Example data for the bar graph (y-values)
+                                    // var data = [80];
+
+                                    // Call the function to draw the bar graph
+                                    drawBarGraph(newValue);
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+
+                        }
+                        function myfunction3() {
+                            $.ajax({
+                                url: 'line_data',  // Replace with the actual URL of your API endpoint
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (response) {
+                                    var tag3_values = response.tag3_values;
+                                    var tanks_volume2 = response.tanks_volume2
+                                    var lastValue = [tag3_values[tag3_values.length - 1]]
+                                    console.log('function 3')
+
+                                    function convertPercentage(oldValue) {
+                                        var oldMin = 4;
+                                        var oldMax = 20;
+                                        var newMin = 0;
+                                        var newMax = 100;
+
+                                        // Convert the percentage value to the 0-1 range
+                                        var percentage = (oldValue - oldMin) / (oldMax - oldMin);
+
+                                        // Convert the 0-1 range to the new range
+                                        var newValue = (percentage * (newMax - newMin)) + newMin;
+
+                                        return newValue;
+                                    }
+                                    var oldValue = lastValue; // For example, representing 10%
+                                    var newValue = [convertPercentage(oldValue)]
+                                    // console.log(newValue);
+
+                                    function drawBarGraph(newValue) {
+                                        var canvas = document.getElementById('barCanvas');
+                                        var context = canvas.getContext('2d');
+
+                                        var barWidth = 20;
+                                        var spaceBetweenBars = 30;
+                                        var startX = 50;
+                                        var startY = 20;
+                                        var maxHeight = canvas.height - startY * 2;
+
+                                        // Clear the canvas
+                                        context.clearRect(0, 0, canvas.width, canvas.height);
+
+                                        // Draw bars
+                                        for (var i = 0; i < newValue.length; i++) {
+                                            var barHeight = (newValue[i] / 100) * maxHeight; // Adjusting the bar height based on the y-value
+                                            context.beginPath();
+                                            context.rect(startX + i * (barWidth + spaceBetweenBars), startY + maxHeight - barHeight, barWidth, barHeight);
+                                            context.fillStyle = 'grey'; // Color of the bars
+                                            context.fill();
+                                            // context.strokeStyle = 'black'; // Border color of the bars
+                                            // context.stroke();
+                                        }
+                                        context.fillStyle = 'black';
+                                        context.textAlign = 'center';
+                                        context.fillText('volume of tank ' + tanks_volume2[2] + 'Ltr', startX + i * (barWidth + spaceBetweenBars) + barWidth / 2, startY + maxHeight - barHeight - 5);
+                                        // Draw markings and text
+                                        context.beginPath();
+                                        context.font = "10px Arial";
+                                        context.textAlign = "right";
+                                        context.fillStyle = "grey";
+                                        context.fillText("100", startX - 10, startY + 10);
+                                        context.fillText("80", startX - 10, startY + maxHeight * 0.2 + 10);
+                                        context.fillText("60", startX - 10, startY + maxHeight * 0.4 + 10);
+                                        context.fillText("40", startX - 10, startY + maxHeight * 0.6 + 10);
+                                        context.fillText("20", startX - 10, startY + maxHeight * 0.8 + 10);
+                                        context.fillText("0", startX - 10, startY + maxHeight + 10);
+
+                                        context.moveTo(startX - 5, startY);
+                                        context.lineTo(startX - 5, startY + maxHeight + 5);
+                                        context.strokeStyle = "black";
+                                        context.stroke();
+                                    }
+
+                                    // Example data for the bar graph (y-values)
+                                    // var data = [80];
+
+                                    // Call the function to draw the bar graph
+                                    drawBarGraph(newValue);
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+
+                        }
+                        function myfunction4() {
+                            $.ajax({
+                                url: 'line_data',  // Replace with the actual URL of your API endpoint
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (response) {
+                                    var tag4_values = response.tag4_values;
+                                    var tanks_volume2 = response.tanks_volume2
+                                    var lastValue = [tag4_values[tag4_values.length - 1]]
+                                    console.log('function 4')
+
+                                    function convertPercentage(oldValue) {
+                                        var oldMin = 4;
+                                        var oldMax = 20;
+                                        var newMin = 0;
+                                        var newMax = 100;
+
+                                        // Convert the percentage value to the 0-1 range
+                                        var percentage = (oldValue - oldMin) / (oldMax - oldMin);
+
+                                        // Convert the 0-1 range to the new range
+                                        var newValue = (percentage * (newMax - newMin)) + newMin;
+
+                                        return newValue;
+                                    }
+                                    var oldValue = lastValue; // For example, representing 10%
+                                    var newValue = [convertPercentage(oldValue)]
+                                    // console.log(newValue);
+
+                                    function drawBarGraph(newValue) {
+                                        var canvas = document.getElementById('barCanvas');
+                                        var context = canvas.getContext('2d');
+
+                                        var barWidth = 20;
+                                        var spaceBetweenBars = 30;
+                                        var startX = 50;
+                                        var startY = 20;
+                                        var maxHeight = canvas.height - startY * 2;
+
+                                        // Clear the canvas
+                                        context.clearRect(0, 0, canvas.width, canvas.height);
+
+                                        // Draw bars
+                                        for (var i = 0; i < newValue.length; i++) {
+                                            var barHeight = (newValue[i] / 100) * maxHeight; // Adjusting the bar height based on the y-value
+                                            context.beginPath();
+                                            context.rect(startX + i * (barWidth + spaceBetweenBars), startY + maxHeight - barHeight, barWidth, barHeight);
+                                            context.fillStyle = 'grey'; // Color of the bars
+                                            context.fill();
+                                            // context.strokeStyle = 'black'; // Border color of the bars
+                                            // context.stroke();
+                                        }
+                                        context.fillStyle = 'black';
+                                        context.textAlign = 'center';
+                                        context.fillText('volume of tank ' + tanks_volume2[3] + 'Ltr', startX + i * (barWidth + spaceBetweenBars) + barWidth / 2, startY + maxHeight - barHeight - 5);
+                                        // Draw markings and text
+                                        context.beginPath();
+                                        context.font = "10px Arial";
+                                        context.textAlign = "right";
+                                        context.fillStyle = "grey";
+                                        context.fillText("100", startX - 10, startY + 10);
+                                        context.fillText("80", startX - 10, startY + maxHeight * 0.2 + 10);
+                                        context.fillText("60", startX - 10, startY + maxHeight * 0.4 + 10);
+                                        context.fillText("40", startX - 10, startY + maxHeight * 0.6 + 10);
+                                        context.fillText("20", startX - 10, startY + maxHeight * 0.8 + 10);
+                                        context.fillText("0", startX - 10, startY + maxHeight + 10);
+
+                                        context.moveTo(startX - 5, startY);
+                                        context.lineTo(startX - 5, startY + maxHeight + 5);
+                                        context.strokeStyle = "black";
+                                        context.stroke();
+                                    }
+
+                                    // Example data for the bar graph (y-values)
+                                    // var data = [80];
+
+                                    // Call the function to draw the bar graph
+                                    drawBarGraph(newValue);
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+
+                        }
+                        function myfunction5() {
+                            $.ajax({
+                                url: 'line_data',  // Replace with the actual URL of your API endpoint
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (response) {
+                                    var tag5_values = response.tag5_values;
+                                    var tanks_volume2 = response.tanks_volume2
+                                    var lastValue = [tag5_values[tag5_values.length - 1]]
+                                    function convertPercentage(oldValue) {
+                                        var oldMin = 4;
+                                        var oldMax = 20;
+                                        var newMin = 0;
+                                        var newMax = 100;
+
+                                        // Convert the percentage value to the 0-1 range
+                                        var percentage = (oldValue - oldMin) / (oldMax - oldMin);
+
+                                        // Convert the 0-1 range to the new range
+                                        var newValue = (percentage * (newMax - newMin)) + newMin;
+
+                                        return newValue;
+                                    }
+                                    var oldValue = lastValue; // For example, representing 10%
+                                    var newValue = [convertPercentage(oldValue)]
+                                    // console.log(newValue);
+
+                                    function drawBarGraph(newValue) {
+                                        var canvas = document.getElementById('barCanvas');
+                                        var context = canvas.getContext('2d');
+
+                                        var barWidth = 20;
+                                        var spaceBetweenBars = 30;
+                                        var startX = 50;
+                                        var startY = 20;
+                                        var maxHeight = canvas.height - startY * 2;
+
+                                        // Clear the canvas
+                                        context.clearRect(0, 0, canvas.width, canvas.height);
+
+                                        // Draw bars
+                                        for (var i = 0; i < newValue.length; i++) {
+                                            var barHeight = (newValue[i] / 100) * maxHeight; // Adjusting the bar height based on the y-value
+                                            context.beginPath();
+                                            context.rect(startX + i * (barWidth + spaceBetweenBars), startY + maxHeight - barHeight, barWidth, barHeight);
+                                            context.fillStyle = 'grey'; // Color of the bars
+                                            context.fill();
+                                            // context.strokeStyle = 'black'; // Border color of the bars
+                                            // context.stroke();
+                                        }
+                                        context.fillStyle = 'black';
+                                        context.textAlign = 'center';
+                                        context.fillText('volume of tank ' + tanks_volume2[4] + 'Ltr', startX + i * (barWidth + spaceBetweenBars) + barWidth / 2, startY + maxHeight - barHeight - 5);
+                                        // Draw markings and text
+                                        context.beginPath();
+                                        context.font = "10px Arial";
+                                        context.textAlign = "right";
+                                        context.fillStyle = "grey";
+                                        context.fillText("100__", startX - 10, startY + 10);
+                                        context.fillText("80__", startX - 10, startY + maxHeight * 0.2 + 10);
+                                        context.fillText("60__", startX - 10, startY + maxHeight * 0.4 + 10);
+                                        context.fillText("40__", startX - 10, startY + maxHeight * 0.6 + 10);
+                                        context.fillText("20__", startX - 10, startY + maxHeight * 0.8 + 10);
+                                        context.fillText("0__", startX - 10, startY + maxHeight + 10);
+
+                                        context.moveTo(startX - 5, startY);
+                                        context.lineTo(startX - 5, startY + maxHeight + 5);
+                                        context.strokeStyle = "black";
+                                        context.stroke();
+                                    }
+
+                                    // Example data for the bar graph (y-values)
+                                    // var data = [80];
+
+                                    // Call the function to draw the bar graph
+                                    drawBarGraph(newValue);
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+
+                        }
+                        function myfunction6() {
+                            $.ajax({
+                                url: 'line_data',  // Replace with the actual URL of your API endpoint
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (response) {
+                                    var tag6_values = response.tag6_values;
+                                    var tanks_volume2 = response.tanks_volume2
+                                    var lastValue = [tag6_values[tag6_values.length - 1]]
+                                    function convertPercentage(oldValue) {
+                                        var oldMin = 4;
+                                        var oldMax = 20;
+                                        var newMin = 0;
+                                        var newMax = 100;
+
+                                        // Convert the percentage value to the 0-1 range
+                                        var percentage = (oldValue - oldMin) / (oldMax - oldMin);
+
+                                        // Convert the 0-1 range to the new range
+                                        var newValue = (percentage * (newMax - newMin)) + newMin;
+
+                                        return newValue;
+                                    }
+                                    var oldValue = lastValue; // For example, representing 10%
+                                    var newValue = [convertPercentage(oldValue)]
+                                    // console.log(newValue);
+
+                                    function drawBarGraph(newValue) {
+                                        var canvas = document.getElementById('barCanvas');
+                                        var context = canvas.getContext('2d');
+
+                                        var barWidth = 20;
+                                        var spaceBetweenBars = 30;
+                                        var startX = 50;
+                                        var startY = 20;
+                                        var maxHeight = canvas.height - startY * 2;
+
+                                        // Clear the canvas
+                                        context.clearRect(0, 0, canvas.width, canvas.height);
+
+                                        // Draw bars
+                                        for (var i = 0; i < newValue.length; i++) {
+                                            var barHeight = (newValue[i] / 100) * maxHeight; // Adjusting the bar height based on the y-value
+                                            context.beginPath();
+                                            context.rect(startX + i * (barWidth + spaceBetweenBars), startY + maxHeight - barHeight, barWidth, barHeight);
+                                            context.fillStyle = 'grey'; // Color of the bars
+                                            context.fill();
+                                            // context.strokeStyle = 'black'; // Border color of the bars
+                                            // context.stroke();
+                                        }
+                                        context.fillStyle = 'black';
+                                        context.textAlign = 'center';
+                                        context.fillText('volume of tank ' + tanks_volume2[5] + 'Ltr', startX + i * (barWidth + spaceBetweenBars) + barWidth / 2, startY + maxHeight - barHeight - 5);
+                                        // Draw markings and text
+                                        context.beginPath();
+                                        context.font = "10px Arial";
+                                        context.textAlign = "right";
+                                        context.fillStyle = "grey";
+                                        context.fillText("100", startX - 10, startY + 10);
+                                        context.fillText("80", startX - 10, startY + maxHeight * 0.2 + 10);
+                                        context.fillText("60", startX - 10, startY + maxHeight * 0.4 + 10);
+                                        context.fillText("40", startX - 10, startY + maxHeight * 0.6 + 10);
+                                        context.fillText("20", startX - 10, startY + maxHeight * 0.8 + 10);
+                                        context.fillText("0", startX - 10, startY + maxHeight + 10);
+
+                                        context.moveTo(startX - 5, startY);
+                                        context.lineTo(startX - 5, startY + maxHeight + 5);
+                                        context.strokeStyle = "black";
+                                        context.stroke();
+                                    }
+
+                                    // Example data for the bar graph (y-values)
+                                    // var data = [80];
+
+                                    // Call the function to draw the bar graph
+                                    drawBarGraph(newValue);
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+
+                        }
+                        function myfunction7() {
+                            $.ajax({
+                                url: 'line_data',  // Replace with the actual URL of your API endpoint
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (response) {
+                                    var tag7_values = response.tag7_values;
+                                    var tanks_volume2 = response.tanks_volume2
+                                    var lastValue = [tag7_values[tag7_values.length - 1]]
+                                    function convertPercentage(oldValue) {
+                                        var oldMin = 4;
+                                        var oldMax = 20;
+                                        var newMin = 0;
+                                        var newMax = 100;
+
+                                        // Convert the percentage value to the 0-1 range
+                                        var percentage = (oldValue - oldMin) / (oldMax - oldMin);
+
+                                        // Convert the 0-1 range to the new range
+                                        var newValue = (percentage * (newMax - newMin)) + newMin;
+
+                                        return newValue;
+                                    }
+                                    var oldValue = lastValue; // For example, representing 10%
+                                    var newValue = [convertPercentage(oldValue)]
+                                    // console.log(newValue);
+
+                                    function drawBarGraph(newValue) {
+                                        var canvas = document.getElementById('barCanvas');
+                                        var context = canvas.getContext('2d');
+
+                                        var barWidth = 20;
+                                        var spaceBetweenBars = 30;
+                                        var startX = 50;
+                                        var startY = 20;
+                                        var maxHeight = canvas.height - startY * 2;
+
+                                        // Clear the canvas
+                                        context.clearRect(0, 0, canvas.width, canvas.height);
+
+                                        // Draw bars
+                                        for (var i = 0; i < newValue.length; i++) {
+                                            var barHeight = (newValue[i] / 100) * maxHeight; // Adjusting the bar height based on the y-value
+                                            context.beginPath();
+                                            context.rect(startX + i * (barWidth + spaceBetweenBars), startY + maxHeight - barHeight, barWidth, barHeight);
+                                            context.fillStyle = 'grey'; // Color of the bars
+                                            context.fill();
+                                            // context.strokeStyle = 'black'; // Border color of the bars
+                                            // context.stroke();
+                                        }
+                                        context.fillStyle = 'black';
+                                        context.textAlign = 'center';
+                                        context.fillText('volume of tank ' + tanks_volume2[6] + 'Ltr', startX + i * (barWidth + spaceBetweenBars) + barWidth / 2, startY + maxHeight - barHeight - 5);
+                                        // Draw markings and text
+                                        context.beginPath();
+                                        context.font = "10px Arial";
+                                        context.textAlign = "right";
+                                        context.fillStyle = "grey";
+                                        context.fillText("100", startX - 10, startY + 10);
+                                        context.fillText("80", startX - 10, startY + maxHeight * 0.2 + 10);
+                                        context.fillText("60", startX - 10, startY + maxHeight * 0.4 + 10);
+                                        context.fillText("40", startX - 10, startY + maxHeight * 0.6 + 10);
+                                        context.fillText("20", startX - 10, startY + maxHeight * 0.8 + 10);
+                                        context.fillText("0", startX - 10, startY + maxHeight + 10);
+
+                                        context.moveTo(startX - 5, startY);
+                                        context.lineTo(startX - 5, startY + maxHeight + 5);
+                                        context.strokeStyle = "black";
+                                        context.stroke();
+                                    }
+
+                                    // Example data for the bar graph (y-values)
+                                    // var data = [80];
+
+                                    // Call the function to draw the bar graph
+                                    drawBarGraph(newValue);
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+
+                        }
+                        function myfunction8() {
+                            $.ajax({
+                                url: 'line_data',  // Replace with the actual URL of your API endpoint
+                                type: 'GET',
+                                dataType: 'json',
+                                success: function (response) {
+                                    var tag8_values = response.tag8_values;
+                                    var tanks_volume2 = response.tanks_volume2
+                                    var lastValue = [tag8_values[tag8_values.length - 1]]
+                                    function convertPercentage(oldValue) {
+                                        var oldMin = 4;
+                                        var oldMax = 20;
+                                        var newMin = 0;
+                                        var newMax = 100;
+
+                                        // Convert the percentage value to the 0-1 range
+                                        var percentage = (oldValue - oldMin) / (oldMax - oldMin);
+
+                                        // Convert the 0-1 range to the new range
+                                        var newValue = (percentage * (newMax - newMin)) + newMin;
+
+                                        return newValue;
+                                    }
+                                    var oldValue = lastValue; // For example, representing 10%
+                                    var newValue = [convertPercentage(oldValue)]
+                                    // console.log(newValue);
+
+                                    function drawBarGraph(newValue) {
+                                        var canvas = document.getElementById('barCanvas');
+                                        var context = canvas.getContext('2d');
+
+                                        var barWidth = 20;
+                                        var spaceBetweenBars = 30;
+                                        var startX = 50;
+                                        var startY = 20;
+                                        var maxHeight = canvas.height - startY * 2;
+
+                                        // Clear the canvas
+                                        context.clearRect(0, 0, canvas.width, canvas.height);
+
+                                        // Draw bars
+                                        for (var i = 0; i < newValue.length; i++) {
+                                            var barHeight = (newValue[i] / 100) * maxHeight; // Adjusting the bar height based on the y-value
+                                            context.beginPath();
+                                            context.rect(startX + i * (barWidth + spaceBetweenBars), startY + maxHeight - barHeight, barWidth, barHeight);
+                                            context.fillStyle = 'grey'; // Color of the bars
+                                            context.fill();
+                                            // context.strokeStyle = 'black'; // Border color of the bars
+                                            // context.stroke();
+                                        }
+                                        context.fillStyle = 'black';
+                                        context.textAlign = 'center';
+                                        context.fillText('volume of tank ' + tanks_volume2[7] + 'Ltr', startX + i * (barWidth + spaceBetweenBars) + barWidth / 2, startY + maxHeight - barHeight - 5);
+                                        // Draw markings and text
+                                        context.beginPath();
+                                        context.font = "10px Arial";
+                                        context.textAlign = "right";
+                                        context.fillStyle = "grey";
+                                        context.fillText("100", startX - 10, startY + 10);
+                                        context.fillText("80", startX - 10, startY + maxHeight * 0.2 + 10);
+                                        context.fillText("60", startX - 10, startY + maxHeight * 0.4 + 10);
+                                        context.fillText("40", startX - 10, startY + maxHeight * 0.6 + 10);
+                                        context.fillText("20", startX - 10, startY + maxHeight * 0.8 + 10);
+                                        context.fillText("0", startX - 10, startY + maxHeight + 10);
+
+                                        context.moveTo(startX - 5, startY);
+                                        context.lineTo(startX - 5, startY + maxHeight + 5);
+                                        context.strokeStyle = "black";
+                                        context.stroke();
+                                    }
+
+                                    // Call the function to draw the bar graph
+                                    drawBarGraph(newValue);
+                                },
+                                error: function (error) {
+                                    console.error('Error fetching data:', error);
+                                }
+                            });
+
+                        }
+                    </script>
+
+
+                    <div class="card col-4"
+                        style="height: 40vh; margin-top: 2vh; margin-left: 59vh;background-color: #e5e7e9;width: 42vh;">
+
+                        <canvas id="conicalCanvas" width="380" height="450"></canvas>
+                        <script>
+
+
+                            // function drawCylinder(diameter, height, rectWidth, rectHeight, rectColor) {
+                            //     var canvas = document.getElementById('conicalCanvas');
+                            //     var context = canvas.getContext('2d');
+
+                            //     var centerX = canvas.width / 2;
+                            //     var centerY = canvas.height / 2;
+                            //     var radius = diameter / 2;
+
+                            //     context.clearRect(0, 0, canvas.width, canvas.height);
+
+                            //     // Draw top ellipse
+                            //     context.beginPath();
+                            //     context.ellipse(centerX, centerY - height / 2, radius, diameter / 10, 0, 0, Math.PI * 2);
+                            //     context.closePath();
+                            //     context.fillStyle = 'gray';
+                            //     context.fill();
+
+                            //     // Draw bottom ellipse
+                            //     context.beginPath();
+                            //     context.ellipse(centerX, centerY + height / 2, radius, diameter / 10, 0, 0, Math.PI * 2);
+                            //     context.closePath();
+                            //     context.fill();
+
+                            //     // Draw connecting lines
+                            //     context.beginPath();
+                            //     context.moveTo(centerX - radius, centerY - height / 2);
+                            //     context.lineTo(centerX - radius, centerY + height / 2);
+                            //     context.moveTo(centerX + radius, centerY - height / 2);
+                            //     context.lineTo(centerX + radius, centerY + height / 2);
+                            //     context.stroke();
+
+                            //     // Draw rectangle
+                            //     var rectWidth = 20;
+                            //     var rectHeight = 300;
+                            //     var rectX = 180; // Adjust this value to change the horizontal placement of the rectangle
+                            //     var rectY = 100; // Adjust this value to change the vertical placement of the rectangle
+
+                            //     context.beginPath();
+                            //     context.rect(rectX, rectY, rectWidth, rectHeight);
+                            //     context.fillStyle = 'white';
+                            //     context.fill();
+                            //     context.strokeStyle = 'black';
+                            //     context.stroke();
+                            //     // Adjust the position to center the cylinder
+                            //     var x = centerX;
+                            //     var y = centerY - height / 2;
+
+                            //     // Increase the size of the cylinder
+                            //     var radiusX = diameter / 2 * 1.5;  // Adjust the multiplier as needed
+                            //     var radiusY = diameter / 8 * 1.5;  // Adjust the multiplier as needed
+
+                            //     context.beginPath();
+                            //     context.moveTo(x - radiusX / 0.97, y + height);
+                            //     context.lineTo(x + radiusX / 0.98, y + height);
+                            //     context.lineTo(x + radiusX * 0.4, canvas.height - 30);
+                            //     context.lineTo(x - radiusX * 0.4, canvas.height - 30);
+                            //     context.closePath();
+
+                            //     // Fill the trapezium with color
+                            //     // context.fillStyle = cylinderColor;
+                            //     // context.fill();
+                            // }
+
+                            // drawCylinder(250, 300);
+
+                            function conicalCanvas(diameter, height, cylinderColor) {
+                                var canvas = document.getElementById('conicalCanvas');
+                                var context = canvas.getContext('2d');
+
+                                // Calculate the center of the canvas
+                                var centerX = canvas.width / 2;
+                                var centerY = canvas.height / 2;
+
+                                // Increase the size of the cylinder
+                                var radiusX = diameter / 2 * 1.5;  // Adjust the multiplier as needed
+                                var radiusY = diameter / 8 * 1.5;  // Adjust the multiplier as needed
+
+                                // Adjust the position to center the cylinder
+                                var x = centerX;
+                                var y = centerY - height / 1.3;
+
+                                // Draw the cylinder
+                                context.beginPath();
+                                context.ellipse(x, y, radiusX, radiusY, 0, 0, 2 * Math.PI, false);
+                                context.moveTo(x - radiusX, y);
+                                context.lineTo(x - radiusX, y + height);
+                                context.moveTo(x + radiusX, y);
+                                context.lineTo(x + radiusX, y + height);
+                                // context.ellipse(x, y + height, radiusX, radiusY, 0, 0, Math.PI, false);
+                                context.lineWidth = 2;
+
+                                // Stroke the cylinder
+                                // Set the color of the cylinder
+                                context.fillStyle = cylinderColor;
+                                context.strokeStyle = cylinderColor;
+
+                                // Fill and stroke the cylinder
+                                context.fill();
+                                context.stroke();
+
+                                context.beginPath();
+                                context.moveTo(x - radiusX / 0.998, y + height);
+                                context.lineTo(x + radiusX / 0.998, y + height);
+                                context.lineTo(x + radiusX * 0.4, canvas.height - 70);
+                                context.lineTo(x - radiusX * 0.4, canvas.height - 70);
+                                context.closePath();
+
+                                // Fill the trapezium with color
+                                context.fillStyle = cylinderColor;
+                                context.fill();
+                                // Draw rectangle
+                                var rectWidth = 20;
+                                var rectHeight = 285;
+                                var rectX = 180; // Adjust this value to change the horizontal placement of the rectangle
+                                var rectY = 95; // Adjust this value to change the vertical placement of the rectangle
+
+                                context.beginPath();
+                                context.rect(rectX, rectY, rectWidth, rectHeight);
+                                context.fillStyle = 'white';
+                                context.fill();
+                                context.strokeStyle = 'black';
+                                context.stroke();
+
+                                var x = centerX;
+                                var y = centerY - height / 2;
+                                var squareSize = 40; // Adjust the size as needed
+                                var squareX = x - squareSize / 0.5;
+                                var squareY = y - squareSize / 0.47; // Adjust the vertical position
+
+                                context.fillStyle = '#fff'; // Set the fill color to white
+                                context.fillRect(squareX, squareY, squareSize, squareSize);
+
+                                // Draw the black border
+                                context.strokeStyle = '#000'; // Set the border color to black
+                                context.lineWidth = 2; // Set the border width
+                                context.strokeRect(squareX, squareY, squareSize, squareSize);
+
+                                var rect2Width = 55;
+                                var rect2Height = 7;
+                                var rect2X = 102.5 ; // Adjust this value to change the horizontal placement of the rect2angle
+                                var rect2Y = 28; // Adjust this value to change the vertical placement of the rect2angle
+
+                                context.beginPath();
+                                context.rect(rect2X, rect2Y, rect2Width, rect2Height);
+                                context.fillStyle = 'white';
+                                context.fill();
+                                context.strokeStyle = 'black';
+                                context.stroke();
+                            }
+
+                            // Call the function with specific values
+                            conicalCanvas(160, 210, "grey");
+                        </script>
+
+                    </div>
+
+                </div>
+        </section>
+    </main>
+
+
+    <!-- Vendor JS Files -->
+    <script src={% static 'assets/vendor/apexcharts/apexcharts.min.js' %}></script>
+    <script src={% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}></script>
+    <script src={% static 'assets/vendor/chart.js/chart.umd.js' %}></script>
+    <script src={% static 'assets/vendor/echarts/echarts.min.js' %}></script>
+    <script src={% static 'assets/vendor/quill/quill.min.js' %}></script>
+    <script src={% static 'assets/vendor/simple-datatables/simple-datatables.js' %}></script>
+    <script src={% static 'assets/vendor/tinymce/tinymce.min.js' %}></script>
+
+    <!-- Template Main JS File -->
+    <script src={% static 'assets/js/main.js' %}></script>
+
+</body>
+
+</html>
